@@ -1,30 +1,15 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base",
-    ":disableRateLimiting",
-    ":automergePr"
+    "local>clevyr/renovate-config-public"
   ],
-  "platformAutomerge": true,
-  "labels": [
-    "dependencies",
-    "{{datasource}}",
-    "{{updateType}}"
-  ],
-  "commitMessagePrefix": ":arrow_up:",
-  "packageRules": [
+  "customManagers": [
     {
-      "matchUpdateTypes": ["lockFileMaintenance", "pin"],
-      "commitMessagePrefix": ":pushpin:"
-    },
-    {
-      "matchUpdateTypes": ["rollback"],
-      "commitMessagePrefix": ":arrow_down:"
-    },
-    {
-      "matchDatasources": ["docker"],
-      "matchPackageNames": ["golang"],
-      "commitMessageTopic": "dependency {{depName}}"
+      "customType": "regex",
+      "fileMatch": [".github/workflows/test.yaml"],
+      "matchStrings": ["version:\\n +- (?<currentValue>.*)\n"],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "clevyr/yampl"
     }
   ]
 }
